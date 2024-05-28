@@ -78,7 +78,7 @@ if (isset($_POST['multisave'])) {
         // Signup successful, insert address into users_address table
         if ($con->insertAddress($userID, $street, $barangay, $city, $province)) {
           // Address insertion successful, redirect to login page
-          header('location:index.php');
+          header('location:login.php');
           exit; // Stop further execution
         } else {
           // Address insertion failed, display error message

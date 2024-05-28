@@ -5,6 +5,26 @@ class database {
         return new PDO ('mysql:host=localhost; dbname=phpcrud', 'root', '');
     }
 
+    function check($username, $password) {
+        // Open database connection
+        $con = $this->opencon();
+    
+        // Prepare the SQL query
+        $query = $con->prepare("SELECT * FROM users WHERE user_name = ?");
+        $query->execute([$username]);
+    
+        // Fetch the user data as an associative array
+        $user = $query->fetch(PDO::FETCH_ASSOC);
+    
+        // If a user is found, verify the password
+        if ($user && password_verify($password, $user['user_pass'])) {
+            return $user;
+        }
+    
+        // If no user is found or password is incorrect, return false
+        return false;
+    }
+
     function signupUser($firstname, $lastname, $birthday, $sex, $email, $username, $password, $profile_picture_path) {
         $con = $this->opencon();
 
