@@ -19,5 +19,9 @@ class database {
           
     }
 
+    function signup($username, $password) {
+        
+    }
+
 }
 ?>

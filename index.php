@@ -107,7 +107,7 @@ if (isset($_POST['multisave'])) {
   <link rel="stylesheet" href="./bootstrap-5.3.3-dist/css/bootstrap.css">
   <!-- JQuery for Address Selector -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <title>Form with MultiStep and Address Selector</title>
+  <title>Form with MultiStep and Address Selector <link rel="icon" href="https://art.pixilart.com/b92ce214fc48b6c.png"> </title>
   <style>
     .form-step {
       display: none;
@@ -118,7 +118,6 @@ if (isset($_POST['multisave'])) {
   </style>
 </head>
 <body>
-<?php include('includes/navbar.php'); ?>
 <div class="container custom-container rounded-3 shadow my-5 p-3 px-5">
   <h3 class="text-center mt-4">Registration Form</h3>
   <form id="registration-form" method="post" action="" enctype="multipart/form-data" novalidate>
