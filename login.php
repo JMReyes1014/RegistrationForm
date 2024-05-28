@@ -29,7 +29,7 @@ if (isset($_POST['login'])) {
       if ($result['account_type'] == 0) {
         header('location:index.php');
       } else if ($result['account_type'] == 1) {
-        header('location:https://youtube.com'); //user_account.php
+        header('location:user_account.php');
       }
       exit();
   } else {
