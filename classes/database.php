@@ -19,9 +19,18 @@ class database {
           
     }
 
-    function signup($username, $password) {
-        
+    function signup($firstname, $lastname, $birthday, $sex, $username, $password) {
+        $con = $this->opencon();
+        //Check if username is existing 
+        $query = $con->prepare("SELECT user_name FROM users WHERE user_name = ?");
+        $query->execute([$username]);
+        $existingUser = $query->fetch();
+        if ($existingUser) {
+            return false;
+        } else {
+            return $con->prepare("INSERT INTO users (user_firstname, user_lastname, user_birthday, user_sex, user_name, user_pass)
+            VALUES(?, ?, ?, ?, ?, ?)")->execute([$firstname, $lastname, $birthday, $sex, $username, $password]);
+        }
     }
-
 }
 ?>

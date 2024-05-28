@@ -15,7 +15,7 @@ if (isset($_POST["signup"])) {
   $confirm = $_POST["confirm"];
 
      if($password == $confirm) {
-        if($con->signup($username, $password)) {
+        if($con->signup($firstname, $lastname, $birthday, $sex, $username, $password)) {
           header("location:login.php");
         }
         else {
@@ -37,7 +37,7 @@ if (isset($_POST["signup"])) {
   <link rel="stylesheet" href="./bootstrap-5.3.3-dist/css/bootstrap.css">
   <!-- Bootstrap CSS -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="./includes/styles.css">
+<link rel="stylesheet" href="./includes/style.css">
 </head>
 <body>
 
