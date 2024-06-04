@@ -67,13 +67,15 @@
           <td><?php echo $row['user_name'] ?></td>
           <td><?php echo $row['address'] ?></td>
           <td>
-          <a href="#" class="btn btn-primary btn-sm">Edit</a>
-
-
+        <!-- Edit button -->
+        <form action="update.php" method="post" class="d-inline;">
+            <input type="hidden" name="id" value="<?php echo $row["user_id"]; ?>">
+            <button type="submit" value="Edit" name="edit" class="btn btn-primary btn-sm" onclick="return confirm('Are you sure you want to edit this user?')"><i class="fas fa-edit"></i></button>
+        </form>
         <!-- Delete button -->
         <form method="POST" style="display: inline;">
             <input type="hidden" name="id" value="<?php echo $row["user_id"]; ?>">
-            <input type="submit" value="Delete" name="delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')">
+            <button type="submit" value="Delete" name="delete" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this user?')"><i class="fas fa-trash-alt"></i></button>
         </form>
           </td>
         </tr>
@@ -105,6 +107,11 @@ document.addEventListener('DOMContentLoaded', function() {
       case 'success':
         title = 'Success!';
         text = 'Record is successfully deleted.';
+        icon = 'success';
+        break;
+      case 'success1':
+        title = 'Success!';
+        text = 'Record is successfully updated.';
         icon = 'success';
         break;
       case 'error':
