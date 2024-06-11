@@ -4,9 +4,10 @@ require_once('classes/database.php');
 $con = new database();
 session_start();
 
+$id = $_SESSION['user_id'];
 
 if (isset($_POST['updatepassword'])) {
-  $userId = $_SESSION['user_id'];
+  $userId = $id;
   $currentPassword = $_POST['current_password'];
   $newPassword = $_POST['new_password'];
   $hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
@@ -21,8 +22,25 @@ if (isset($_POST['updatepassword'])) {
               header('Location: user_account.php?status=error');
               exit();
           }
-      
   } 
+
+  if (isset($_POST['updateaddress'])) {
+    $user_id = $id;
+    $street = $_POST['user_street'];
+    $barangay = $_POST['barangay_text'];
+    $city = $_POST['city_text'];
+    $province = $_POST['province_text'];
+  
+    if($con->updateUserAddress($user_id, $street, $barangay, $city, $province)){
+      // Address updated successfully
+      header('Location: user_account.php?status=success1');
+      exit();
+    }else{
+      // Failed to update address
+      header('Location: user_account.php?status=error');
+      exit();
+    }
+  }
 
 ?>
 
@@ -372,6 +390,122 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script><!-- Password Validation Logic Ends Here -->
+
+<!-- For Address Selector Validation --><script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Fetch region, province, city, and barangay options dynamically if needed
+  // Example for adding event listeners for dynamic fetching
+  // document.getElementById('region').addEventListener('change', fetchProvinces);
+
+  // Example of a function to fetch provinces
+  // function fetchProvinces() {
+  //   const regionId = document.getElementById('region').value;
+  //   // Fetch provinces based on regionId
+  // }
+
+  // Form validation
+  var form = document.getElementById('updateAccountForm');
+  form.addEventListener('submit', function(event) {
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    form.classList.add('was-validated');
+  }, false);
+});
+</script><!-- For Address Selector Validation -->
+
+<!-- Change Profile Picture Logic Starts here --><script>
+    $(document).ready(function() {
+        $('#profilePictureInput').change(function() {
+            const file = this.files[0];
+            if (file) {
+                // Check file size
+                if (file.size > 5 * 1024 * 1024) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'File size exceeds 5MB.',
+                        icon: 'error'
+                    });
+                    $('#imagePreview').hide();
+                    $('#uploadProfilePicForm').data('valid', false);
+                    return;
+                } else {
+                    $('#fileSizeError').hide();
+                    $('#uploadProfilePicForm').data('valid', true);
+                }
+
+                // Preview the image
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#imagePreview').attr('src', e.target.result);
+                    $('#imagePreview').show();
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        $('#uploadProfilePicForm').submit(function(event) {
+            event.preventDefault();
+            if (!$(this).data('valid')) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'File size exceeds 5MB.',
+                    icon: 'error'
+                });
+                return;
+            }
+
+            const formData = new FormData(this);
+            $.ajax({
+                url: 'upload_profile_picture.php', // Change this to your PHP file
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    try {
+                        if (typeof response === 'string') {
+                            response = JSON.parse(response);
+                        }
+                        if (response.success) {
+                            $('#profilePicPreview').attr('src', response.filepath);
+                            $('#changeProfilePictureModal').modal('hide');
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Profile picture updated successfully.',
+                                icon: 'success'
+                            }).then(() => {
+                                // Reload the page after displaying the success message
+                                window.location.href = window.location.href.split('?')[0];
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: response.error,
+                                icon: 'error'
+                            });
+                        }
+                    } catch (e) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred while processing the response.',
+                            icon: 'error'
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred while uploading the file.',
+                        icon: 'error'
+                    });
+                }
+            });
+        });
+    });
+    </script><!-- Change Profile Picture Logic Ends here -->
+
 
 <!-- SweetAlert2 Script For Pop Up Notification -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
